@@ -1,5 +1,6 @@
 var express = require("express");
 var mysql = require("mysql");
+var cors = require("cors");
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -15,11 +16,11 @@ con.connect(function(err) {
 
 var app = express();
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(7000, () => {
+    console.log("Server running on port 7000");
 });
 
-app.get("/list", (req, res, next) => {
+app.get("/list", cors(), (req, res, next) => {
     con.query("SELECT namabahan, harga FROM bahan;", function(errno, result) {
         if (errno) throw errno;
         res.json(result);
@@ -27,7 +28,7 @@ app.get("/list", (req, res, next) => {
 });
 
 
-app.get('/buy/:fund([0-9]{1,})/:id([0-9]{1,})/:amount([0-9]{1,})', function(req, res) {
+app.get('/buy/:fund([0-9]{1,})/:id([0-9]{1,})/:amount([0-9]{1,})', cors(), function(req, res) {
     var fund = req.params.fund;
     var id = req.params.id;
     var amount = req.params.amount;
